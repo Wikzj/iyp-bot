@@ -9,7 +9,7 @@ from flask import Flask,request
 
 token='256012067:AAEfX5rYApiaVAZ99BUd7sbb1ulo8kBbrG4'
 
-WEBHOOK_HOST = 'enigmatic-beach-48770.herokuapp.com'
+WEBHOOK_HOST = 'pantsubot.herokuapp.com'
 WEBHOOK_URL_PATH = '/pbot'
 WEBHOOK_PORT = os.environ.get('PORT',5000)
 WEBHOOK_LISTEN = '0.0.0.0'
