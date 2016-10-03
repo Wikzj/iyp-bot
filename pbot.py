@@ -10,7 +10,7 @@ token='256012067:AAEfX5rYApiaVAZ99BUd7sbb1ulo8kBbrG4'
 
 #WEBHOOK_HOST = 'pantsubot.herokuapp.com'
 #WEBHOOK_URL_PATH = ''
-WEBHOOK_PORT = os.environ.get('PORT',443)
+WEBHOOK_PORT = os.environ.get('PORT',5000)
 WEBHOOK_LISTEN = '0.0.0.0'
 
 WEBHOOK_URL_BASE = "https://pantsubot.herokuapp.com"
@@ -81,5 +81,5 @@ def remove_hook():
     return "Webhook has been removed"
 
 # run
-server.run(host="0.0.0.0", port=os.environ.get('PORT', 443))
+server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
 webhook()
