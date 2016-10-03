@@ -6,21 +6,18 @@ import pymorphy2
 import telebot
 from flask import Flask,request
 
-
 token='256012067:AAEfX5rYApiaVAZ99BUd7sbb1ulo8kBbrG4'
 
 WEBHOOK_HOST = 'pantsubot.herokuapp.com'
-WEBHOOK_URL_PATH = '/pbot'
+WEBHOOK_URL_PATH = ''
 WEBHOOK_PORT = os.environ.get('PORT',5000)
 WEBHOOK_LISTEN = '0.0.0.0'
-
 
 WEBHOOK_URL_BASE = "https://%s/%s"% (WEBHOOK_HOST,WEBHOOK_URL_PATH)
 
 bot = telebot.TeleBot(token)
 morph = pymorphy2.MorphAnalyzer()
 server=Flask(__name__)
-
 
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
@@ -63,22 +60,19 @@ def pants(message):
             txt = random.choice(words).encode('utf8') + ' у тебя в штанах'
             bot.send_message(message.chat.id, txt)
 
-# Получение сообщений
+# get messages
 @server.route("/bot", methods=['POST'])
 def getMessage():
-    # Чтение данных от серверов telegram
     bot.process_new_messages(
         [telebot.types.Update.de_json(request.stream.read().decode("utf-8")).message
         ])
     return "!", 200
 
-# Установка webhook
+# webhook
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    # Если вы будете использовать хостинг или сервис без https
-    # то вам необходимо создать сертификат и
-    # добавить параметр certificate=open('ваш сертификат.pem')
+    #certificate=open('.pem')
     return "%s" %bot.set_webhook(url=WEBHOOK_URL_BASE), 200
 
 @server.route("/remove")
@@ -86,6 +80,6 @@ def remove_hook():
     bot.remove_webhook()
     return "Webhook has been removed"
 
-# Запуск сервера
+# run
 server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
 webhook()
