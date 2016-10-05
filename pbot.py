@@ -9,7 +9,7 @@ from flask import Flask,request
 token='256012067:AAHNnxWoOcgn7gptNtGeTJAPtzoln4M2dWY'
 
 WEBHOOK_HOST = 'pantsubot.herokuapp.com'
-WEBHOOK_URL_PATH = '/bot'
+WEBHOOK_URL_PATH = ''
 WEBHOOK_PORT = os.environ.get('PORT',5000)
 WEBHOOK_LISTEN = '0.0.0.0'
 
@@ -61,7 +61,7 @@ def pants(message):
             bot.send_message(message.chat.id, txt)
 
 # get message
-@server.route("/bot", methods=['POST'])
+@server.route("", methods=['POST'])
 def getMessage():
     bot.process_new_messages(
         [telebot.types.Update.de_json(request.stream.read().decode("utf-8")).message
