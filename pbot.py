@@ -1,11 +1,23 @@
-# -*- coding: cp1251 -*-
-import telebot
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
 import random
 import pymorphy2
+import telebot
+from flask import Flask,request
 
-token = '256012067:AAHNnxWoOcgn7gptNtGeTJAPtzoln4M2dWY'
+token='256012067:AAHNnxWoOcgn7gptNtGeTJAPtzoln4M2dWY'
+
+WEBHOOK_HOST = 'pantsubot.herokuapp.com'
+WEBHOOK_URL_PATH = '/bot'
+WEBHOOK_PORT = os.environ.get('PORT',5000)
+WEBHOOK_LISTEN = '0.0.0.0'
+
+WEBHOOK_URL_BASE = "https://%s/%s"% (WEBHOOK_HOST,WEBHOOK_URL_PATH)
+
 bot = telebot.TeleBot(token)
 morph = pymorphy2.MorphAnalyzer()
+server=Flask(__name__)
 
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
@@ -43,16 +55,29 @@ def pants(message):
             if u'ахах' not in word:
                 words.append(p.normal_form)
     if len(words) != 0: # еще вырубить двоякие слова
-        if random.randint(1, 100) == 2:
+        if random.randint(1, 8) == 2:
     #if len(words) != 0:
             txt = random.choice(words).encode('utf8') + ' у тебя в штанах'
             bot.send_message(message.chat.id, txt)
 
-#def listener(messages):
-#    for message in messages:
-#        print message.from_user.first_name
-#        print message.text
+# get message
+@server.route("/bot", methods=['POST'])
+def getMessage():
+    bot.process_new_messages(
+        [telebot.types.Update.de_json(request.stream.read().decode("utf-8")).message
+        ])
+    return "!", 200
 
-if __name__ == '__main__':
-#    bot.set_update_listener(listener)
-    bot.polling(none_stop=True)
+#webhook
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    return "%s" %bot.set_webhook(url=WEBHOOK_URL_BASE), 200
+
+@server.route("/remove")
+def remove_hook():
+    bot.remove_webhook()
+    return "Webhook has been removed"
+
+server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+webhook()
