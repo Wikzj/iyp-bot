@@ -61,7 +61,7 @@ def pants(message):
             bot.send_message(message.chat.id, txt)
 
 # get message
-@server.route("", methods=['POST'])
+@server.route("/", methods=['POST'])
 def getMessage():
     bot.process_new_messages(
         [telebot.types.Update.de_json(request.stream.read().decode("utf-8")).message
