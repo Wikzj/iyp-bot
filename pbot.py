@@ -6,7 +6,7 @@ import pymorphy2
 import telebot
 from flask import Flask,request
 
-token='256012067:AAHNnxWoOcgn7gptNtGeTJAPtzoln4M2dWY'
+token='<TOKEN>'
 
 WEBHOOK_HOST = 'pantsubot.herokuapp.com'
 WEBHOOK_URL_PATH = '/bot'
